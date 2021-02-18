@@ -1,0 +1,34 @@
+<canvas id="field" width="550" height="550" style="background: gray"></canvas>
+<br/>
+<div>
+    <button onclick="stop(); learn()">Start</button>
+    <button onclick="stop()">Stop</button>
+</div>
+
+<hr/>
+
+<div>
+    Target:
+    X: <output id="tx">0</output>
+    Y: <output id="ty">0</output>
+</div>
+
+<div>
+    Actor:
+    X: <output id="ax">0</output>
+    Y: <output id="ay">0</output>
+</div>
+<div>
+    Steps: <output id="steps">0</output>
+</div>
+
+<script src="https://threejs.org/build/three.js"></script>
+<script src="../node_modules/reimprovejs/dist/reimprove.js"></script>
+<script src="test.js"></script>
+<script>
+    // const ctx = document.getElementById('field').getContext('2d');
+    // const magnification = 50;
+    //
+    // ctx.fillStyle = 'rgb(255, 0, 0)';
+    // ctx.fillRect(50, 50, 50, 50);
+</script>

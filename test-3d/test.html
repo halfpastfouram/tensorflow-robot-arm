@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="../main.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/reimprovejs@0/dist/reimprove.js"></script>
+
+</head>
+<body>
+
+<div id="toolbar" style="position: absolute; bottom: 0px; padding: 5px; color: #000;">
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <button id="display">Toggle display</button>
+    <div>
+        <strong>Target</strong>
+        X: <output id="targetX">0</output>
+        Y: <output id="targetY">0</output>
+        Z: <output id="targetZ">0</output>
+    </div>
+    <div>
+        <strong>Actor</strong>
+        X: <output id="actorX">0</output>
+        Y: <output id="actorY">0</output>
+        Z: <output id="actorZ">0</output>
+    </div>
+
+    <div>
+        <strong>Steps</strong>
+        <output id="steps">0</output>
+    </div>
+    <div>
+        <strong>Total reward</strong>
+        <output id="reward">0</output>
+    </div>
+    <div>
+        <strong>Total cubes</strong>
+        <output id="cubes">0</output>
+    </div>
+</div>
+
+<script src="script.js" type="module"></script>
+</body>
+</html>
