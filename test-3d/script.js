@@ -231,7 +231,7 @@ let distance = jumpDistance(actorVector, targetVector);
 let steps = 0;
 let active = false;
 let working = false;
-let display = false;
+let display = true;
 let totalReward = 0;
 
 rememberPixel(actorVector, actor);
