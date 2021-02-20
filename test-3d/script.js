@@ -182,12 +182,20 @@ network.addNeuralNetworkLayers([
     {type: 'dense', units: 32, activation: 'relu'},
     {type: 'dense', units: numActions, activation: 'softmax'}
 ]);
+
 // Now we initialize our model, and start adding layers
 let model = new ReImprove.Model.FromNetwork(network, modelFitConfig);
 
 // Finally compile the model, we also exactly use tfjs's optimizers and loss functions
 // (So feel free to choose one among tfjs's)
-model.compile({loss: 'meanSquaredError', optimizer: 'sgd'})
+if (localStorage.getItem('tensorflowjs_models/RL-model/info')) {
+    model.loadFromFile('localstorage://RL-model').then(() => {
+        model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
+        console.info('Loaded model from local storage.');
+    });
+} else {
+    model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
+}
 
 // Every single field here is optional, and has a default value. Be careful, it may not fit your needs ...
 const teacherConfig = {
@@ -299,20 +307,6 @@ function doWork()
             outputReward.value = totalReward;
             outputCubes.value = Object.keys(pixels).length;
 
-            // Reward extra for being on the same axis, but only when the current step is closer than the previous step.
-            // This immensely reduces the total amount of steps.
-            if (distance_before > distance_after) {
-                if (actorVector.x === targetVector.x) {
-                    reward += 0.05;
-                }
-                if (actorVector.y === targetVector.y) {
-                    reward += 0.05;
-                }
-                if (actorVector.z === targetVector.z) {
-                    reward += 0.05;
-                }
-            }
-
             if (display) {
                 let pixel;
                 rememberPixel(actorVector, pixel = drawPixel(actorVector, .5, new THREE.Color(0x00ff00 * reward)));
@@ -327,6 +321,11 @@ function doWork()
                 && actorVector.z === targetVector.z
             ) {
                 console.info(`Target: ${distance} Steps: ${steps} Delta: ${(steps - distance)}`);
+
+                // Save trained model:
+                model.model.save('localstorage://RL-model').then(() => {
+                    console.info('Saved model to localstorage');
+                });
 
                 // Clear all pixels:
                 for (let k in pixels) {
