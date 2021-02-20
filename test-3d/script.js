@@ -301,7 +301,7 @@ function doWork()
 
             // Reward extra for being on the same axis, but only when the current step is closer than the previous step.
             // This immensely reduces the total amount of steps.
-            if (distance_before < distance_after) {
+            if (distance_before > distance_after) {
                 if (actorVector.x === targetVector.x) {
                     reward += 0.05;
                 }
