@@ -248,6 +248,9 @@ targetX.value = targetVector.x;
 targetY.value = targetVector.y;
 targetZ.value = targetVector.z;
 
+// This seems to be the quickest backend for my situation.
+ReImprove.setBackend('cpu');
+
 function doWork()
 {
     if (active && ! working) {
@@ -375,10 +378,10 @@ function toggleDisplay() {
 
 const fps = 60;
 function animate() {
-    setTimeout(function() {
+    // setTimeout(function() {
         // slow down render speed
         requestAnimationFrame(animate);
-    }, 1000/fps);
+    // }, 1000/fps);
 
     doWork();
     renderer.render(scene, camera);
