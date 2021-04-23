@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>three.js webgl - collada</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link type="text/css" rel="stylesheet" href="main.css">
@@ -9,19 +8,45 @@
     <script src="https://threejs.org/build/three.js"></script>
     <script src="https://threejs.org/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/reimprovejs@0/dist/reimprove.js"></script>
-    <!-- Import TensorFlow.js -->
-<!--    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>-->
-    <!-- Import tfjs-vis -->
-<!--    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>-->
-
+    <script src="reimprove.js"></script>
 </head>
 <body>
 
 <div id="container"></div>
 
-<!--<script src="script.js"></script>-->
+<div id="toolbar" style="position: absolute; bottom: 0px; padding: 5px; color: #000;">
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <button id="display">Toggle display</button>
+    <div>
+        <strong>Target</strong>
+        X: <output id="targetX">0</output>
+        Y: <output id="targetY">0</output>
+        Z: <output id="targetZ">0</output>
+    </div>
+    <div>
+        <strong>Actor</strong>
+        X: <output id="actorX">0</output>
+        Y: <output id="actorY">0</output>
+        Z: <output id="actorZ">0</output>
+    </div>
+
+    <div>
+        <strong>Steps</strong>
+        <output id="steps">0</output>
+    </div>
+    <div>
+        <strong>Total reward</strong>
+        <output id="reward">0</output>
+    </div>
+    <div>
+        <strong>Total cubes</strong>
+        <output id="cubes">0</output>
+    </div>
+</div>
+
+<script src="utils/tools.js" type="module"></script>
 <script src="improve.js"></script>
-<script src="three.js"></script>
+<script src="script.js" type="module"></script>
 </body>
 </html>

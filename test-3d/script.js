@@ -3,11 +3,13 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
 import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
 import Stats from 'https://unpkg.com/three/examples/jsm/libs/stats.module.js';
+import * as Utils from '../utils/tools.js';
 
 // Setup 3d environment
 let camera, scene, renderer, stats;
 const MAP_SIZE = 10;
 const magnification = 1;
+Utils.setMapSize(MAP_SIZE);
 
 init();
 
@@ -19,6 +21,7 @@ function init() {
     // Scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
+    Utils.setScene(scene);
 
     // Light
     const light = new THREE.HemisphereLight(0xbbbbff, 0x444422);
@@ -92,77 +95,11 @@ const outputSteps = document.getElementById('steps');
 const outputReward = document.getElementById('reward');
 const outputCubes = document.getElementById('cubes');
 
-///////////
-// TOOLS //
-///////////
-
-function drawPixel(vector, size, color, opacity) {
-    if (size === undefined) {
-        size = 1;
-    }
-
-    let dotGeometry = new THREE.BoxGeometry(size, size, size);
-
-    if (color === undefined) {
-        color = new THREE.Color(Math.random() * 0xffffff);
-    }
-
-    if (opacity === undefined) {
-        opacity = 1;
-    }
-
-    let vectorString = vector3ToString(vector);
-    if (pixels.hasOwnProperty(vectorString)) {
-        let foundPixel = pixels[vectorString];
-        if (foundPixel.name === 'start' && foundPixel.name === 'end') {
-            return;
-        } else {
-            scene.remove(foundPixel);
-        }
-    }
-
-    let dotMaterial = new THREE.MeshLambertMaterial({color: color, transparent: true, opacity: opacity});
-    let dot = new THREE.Mesh(dotGeometry, dotMaterial);
-    dot.position.set(vector.x, vector.y, vector.z);
-    scene.add(dot);
-
-    return dot;
-}
-
-function vector3ToString(vector3) {
-    return `${vector3.x}x${vector3.y}x${vector3.z}`;
-}
-
-function rememberPixel(pixelVector, pixel) {
-    pixels[vector3ToString(pixelVector)] = pixel;
-}
-
-function randomPoint() {
-    let min = - (MAP_SIZE / 2);
-    let max = MAP_SIZE / 2;
-
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function jumpDistance(vectorA, vectorB) {
-    return vectorA.distanceTo(vectorB);
-};
-
-function getRandomVector() {
-    const vector = new THREE.Vector3(
-        randomPoint(),
-        randomPoint(),
-        randomPoint()
-    );
-
-    return vector;
-}
-
-
 /////////////////////////////
 // Actor and academy setup //
 /////////////////////////////
 
+ReImprove.setBackend('cpu');
 const modelFitConfig = {
     epochs: 1,
     stepsPerEpoch: 24
@@ -228,36 +165,33 @@ academy.assignTeacherToAgent(agent, teacher);
 // Work //
 //////////
 
-let pixels = {};
-let actorVector = getRandomVector();
-let targetVector = getRandomVector();
-let actor = drawPixel(actorVector, 1, new THREE.Color(0x00ff00), .5);
-let target = drawPixel(targetVector, 1, new THREE.Color(0xff0000), .5);
+let actorVector = Utils.getRandomVector();
+let targetVector = Utils.getRandomVector();
+let actor = Utils.drawPixel(actorVector, 1, new THREE.Color(0x00ff00), .5);
+let target = Utils.drawPixel(targetVector, 1, new THREE.Color(0xff0000), .5);
 actor.name = 'start';
 target.name = 'name';
-let distance = jumpDistance(actorVector, targetVector);
+let distance = Utils.jumpDistance(actorVector, targetVector);
 let steps = 0;
 let active = false;
 let working = false;
 let display = true;
 let totalReward = 0;
 
-rememberPixel(actorVector, actor);
-rememberPixel(targetVector, target);
+Utils.rememberPixel(actorVector, actor);
+Utils.rememberPixel(targetVector, target);
 targetX.value = targetVector.x;
 targetY.value = targetVector.y;
 targetZ.value = targetVector.z;
 
 // This seems to be the quickest backend for my situation.
-ReImprove.setBackend('cpu');
-
 function doWork()
 {
     if (active && ! working) {
         working = true;
 
         // Gather inputs
-        let distance_before = jumpDistance(actorVector, targetVector)
+        let distance_before = Utils.jumpDistance(actorVector, targetVector)
         let inputs = [actorVector.x, actorVector.y, actorVector.z, targetVector.x, targetVector.y, targetVector.z];
 
         // Step the learning
@@ -304,15 +238,15 @@ function doWork()
             outputZ.value = actorVector.z;
             outputSteps.value = steps;
 
-            let distance_after = jumpDistance(actorVector, targetVector);
+            let distance_after = Utils.jumpDistance(actorVector, targetVector);
             let reward = (distance_before === distance_after) ? -0.1 : distance_before - distance_after;
             totalReward += reward;
             outputReward.value = totalReward;
-            outputCubes.value = Object.keys(pixels).length;
+            outputCubes.value = Object.keys(Utils.getPixels()).length;
 
             if (display) {
                 let pixel;
-                rememberPixel(actorVector, pixel = drawPixel(actorVector, .5, new THREE.Color(0x00ff00 * reward)));
+                Utils.rememberPixel(actorVector, pixel = Utils.drawPixel(actorVector, .5, new THREE.Color(0x00ff00 * reward)));
                 pixel.reward = reward;
             }
 
@@ -331,21 +265,22 @@ function doWork()
                 });
 
                 // Clear all pixels:
+                let pixels = Utils.getPixels();
                 for (let k in pixels) {
                     scene.remove(pixels[k]);
                 }
 
                 // Generate new target and actor:
-                pixels      = [];
-                actorVector = getRandomVector();
-                targetVector = getRandomVector();
+                Utils.clearPixels();
+                actorVector = Utils.getRandomVector();
+                targetVector = Utils.getRandomVector();
                 if (display) {
-                    rememberPixel(actorVector, actor = drawPixel(actorVector, 1, new THREE.Color(0x00ff00), .5));
-                    rememberPixel(targetVector, target = drawPixel(targetVector, 1, new THREE.Color(0xff0000), .5));
+                    Utils.rememberPixel(actorVector, actor = Utils.drawPixel(actorVector, 1, new THREE.Color(0x00ff00), .5));
+                    Utils.rememberPixel(targetVector, target = Utils.drawPixel(targetVector, 1, new THREE.Color(0xff0000), .5));
                     actor.name = 'start';
                     target.name = 'name';
                 }
-                distance = jumpDistance(actorVector, targetVector);
+                distance = Utils.jumpDistance(actorVector, targetVector);
                 steps = 0;
                 totalReward = 0;
 
@@ -376,12 +311,8 @@ function toggleDisplay() {
     display = !display;
 }
 
-const fps = 60;
 function animate() {
-    // setTimeout(function() {
-        // slow down render speed
-        requestAnimationFrame(animate);
-    // }, 1000/fps);
+    requestAnimationFrame(animate);
 
     doWork();
     renderer.render(scene, camera);
