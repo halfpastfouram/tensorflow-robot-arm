@@ -1,7 +1,7 @@
 // Find the latest version by visiting https://unpkg.com/three. The URL will
 // redirect to the newest stable release.
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
-import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from '../orbitcontrols.js';
 import Stats from 'https://unpkg.com/three/examples/jsm/libs/stats.module.js';
 import { Model } from './Model.js'
 
