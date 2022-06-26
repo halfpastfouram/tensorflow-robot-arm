@@ -21,6 +21,10 @@ export function setPrecision(newPrecision) {
     precision = newPrecision
 }
 
+export function getPrecision() {
+    return precision
+}
+
 export function setScene(scn) {
     scene = scn;
 }
@@ -70,8 +74,8 @@ export function randomPoint() {
     let min = - (MAP_SIZE / 2);
     let max = MAP_SIZE / 2;
 
-    min = 0.00;
-    max = 25;
+    min = -10.00;
+    max = 10;
 
     return (Math.random() * (max - min + 1.00) + min).toFixed(precision);
 }
@@ -81,9 +85,14 @@ export function jumpDistance(vectorA, vectorB) {
 };
 
 export function getRandomVector() {
+    let y = -1
+    while (y < 0) {
+        y = randomPoint()
+    }
+
     return new THREE.Vector3(
         randomPoint(),
-        randomPoint(),
+        y,
         randomPoint()
     );
 }

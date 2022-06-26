@@ -8,11 +8,11 @@ const modelFitConfig = {
     stepsPerEpoch: 24
 };
 
-const numActions = 12;
+const numActions = 10;
 const inputSize = 4;
 // The window of data which will be sent yo your agent. For instance the x previous inputs, and what actions
 // the agent took
-const temporalWindow = 1;
+const temporalWindow = 2;
 
 const totalInputSize = inputSize * temporalWindow + numActions * temporalWindow + inputSize;
 

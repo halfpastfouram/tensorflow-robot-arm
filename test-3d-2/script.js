@@ -1,9 +1,9 @@
 // Find the latest version by visiting https://unpkg.com/three. The URL will
 // redirect to the newest stable release.
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
-import { OrbitControls } from '../orbitcontrols.js';
+import {OrbitControls} from '../orbitcontrols.js';
 import Stats from 'https://unpkg.com/three/examples/jsm/libs/stats.module.js';
-import { Model } from './Model.js'
+import {Model} from './Model.js'
 
 // Setup 3d environment
 let camera, scene, renderer, stats;
@@ -92,6 +92,7 @@ const outputZ = document.getElementById('actorZ');
 const outputSteps = document.getElementById('steps');
 const outputReward = document.getElementById('reward');
 const outputCubes = document.getElementById('cubes');
+const outputRuns = document.getElementById('runs');
 
 ///////////
 // TOOLS //
@@ -147,16 +148,14 @@ function randomPoint() {
 
 function jumpDistance(vectorA, vectorB) {
     return vectorA.distanceTo(vectorB);
-};
+}
 
 function getRandomVector() {
-    const vector = new THREE.Vector3(
-        randomPoint(),
-        randomPoint(),
-        randomPoint()
+    return new THREE.Vector3(
+      randomPoint(),
+      randomPoint(),
+      randomPoint()
     );
-
-    return vector;
 }
 
 function start() {
@@ -227,6 +226,8 @@ async function doWork()
             [actorVector.x, actorVector.y, actorVector.z, targetVector.x, targetVector.y, targetVector.z],
             [6, 1]
         );
+
+        stateTensor.print()
 
         // Step the learning
         steps++;
@@ -300,9 +301,12 @@ async function doWork()
         );
 
         if (distance_before > distance_after) {
+            stateTensor.print()
+            nextStateTensor.print()
+
             model.train(
-                stateTensor,
-                nextStateTensor
+              stateTensor,
+              nextStateTensor
             );
         }
 
@@ -354,6 +358,7 @@ function restart() {
     outputSteps.value = steps;
     outputReward.value = totalReward;
     outputCubes.value = Object.keys(pixels).length;
+    outputRuns.value = parseInt(outputRuns.value, 10) + 1;
 }
 
 const fps = 60;

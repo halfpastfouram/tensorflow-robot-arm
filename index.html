@@ -32,20 +32,40 @@
     </div>
 
     <div>
+        <strong>Rotations</strong>
+        lAR: <output id="lowerArmRot">0</output>
+        lAB: <output id="lowerArmBend">0</output>
+        eB: <output id="elbowBend">0</output>
+        wR: <output id="wristRot">0</output>
+        wB: <output id="wristBend">0</output>
+        fR: <output id="fingersRot">0</output>
+    </div>
+
+    <div>
         <strong>Steps</strong>
         <output id="steps">0</output>
+        <strong>Distance</strong>
+        <output id="distance">0</output>
+    </div>
+    <div>
+        <strong>Total cubes</strong>
+        <output id="cubes">0</output>
     </div>
     <div>
         <strong>Total reward</strong>
         <output id="reward">0</output>
     </div>
     <div>
-        <strong>Total cubes</strong>
-        <output id="cubes">0</output>
+        <strong>Runs</strong>
+        <output id="runs">0</output>
     </div>
 </div>
 
-<script src="utils/tools.js" type="module"></script>
+<script>
+  const exports = {};
+</script>
+<script src="node_modules/kinematics/dist/kinematics.js"></script>
+<!--<script src="utils/tools.js" type="module"></script>-->
 <script src="improve.js"></script>
 <script src="script.js" type="module"></script>
 </body>

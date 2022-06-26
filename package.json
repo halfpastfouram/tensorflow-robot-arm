@@ -6,8 +6,8 @@
   "type": "module",
   "dependencies": {
     "assert": "^2.0.0",
+    "kinematics": "^1.0.2",
     "reimprovejs": "^0.0.2",
-    "requirejs": "^2.3.6",
     "three": "^0.140.2"
   },
   "scripts": {

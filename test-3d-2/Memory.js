@@ -3,7 +3,7 @@ import {sampleSize} from 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.
 export class Memory {
     constructor(maxMemory) {
         this.maxMemory = maxMemory;
-        this.samples = new Array();
+        this.samples = [];
     }
 
     addSample(sample) {
